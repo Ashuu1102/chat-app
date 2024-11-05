@@ -1,18 +1,68 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from "styled-components"
 import Logo from "../assets/logo.svg"
+import {ToastContainer, toast} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import axios from "axios"
+import { registerRoute } from '../utils/APIRoutes'
 
 function Register() {
 
-    const handleSubmit = (event) => {
+    const navigate = useNavigate()
+
+    const [values, setValues] = useState({
+        username:"",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    })
+    
+    const toastOptions = {
+        position: "bottom-right",
+        autoClose: 8000,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark"
+    }
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        alert("form")
+        if(handleValidation()){
+            const {password, confirmPassword, username, email} = values
+            const {data} = await axios.post(registerRoute, {
+                username, email, password
+            })
+            if (data.status === false){
+                toast.error(data.msg, toastOptions)
+            }
+            if(data.status === true){
+                localStorage.setItem("chat-app-user", JSON.stringify(data.user))
+                navigate("/")
+            }
+        }
     }
     const handleChange = (e) => {
-
+        setValues({...values, [e.target.name]: e.target.value} )
+    }
+    const handleValidation = () => {
+        const {password, confirmPassword, username, email} = values
+        if(password !== confirmPassword){
+            toast.error("password and confirm password should be same.",toastOptions)
+            return false
+        }else if(username.length < 3){
+            toast.error("Username should be greater than 3 characters", toastOptions)
+            return false
+        }else if(password.length < 6){
+            toast.error("Password should be equal or greater than 6 characters", toastOptions)
+            return false
+        }else if(email.trim()===""){
+            toast.error("email is required", toastOptions)
+            return false
+        }
+        return true
     }
   return (
+    <>
     <FormContainer>
         <form onSubmit={(event) => handleSubmit(event)}>
             <div className='brand'>
@@ -26,7 +76,7 @@ function Register() {
             />
             <input type='email' 
             placeholder='Email' 
-            name='useremailname' 
+            name='email' 
             onChange={(e) => handleChange(e)} 
             />
             <input type='password' 
@@ -43,6 +93,8 @@ function Register() {
             <span>already have an account? <Link to="/login">Login</Link></span>
         </form>
     </FormContainer>
+    <ToastContainer />
+    </>
   )
 }
 
@@ -86,6 +138,30 @@ form{
         &:focus {
             border: 0.1rem solid #997af0;
             outline: none
+        }
+    }
+    button{
+        background-color:#997af0;
+        color: white;
+        padding: 1rem 2rem;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 0.4rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        transition: 0.5s ease-in-out;
+        &:hover{
+            background-color: #4e0eff
+        }
+    }
+    span {
+        color: white;
+        text-transform: uppercase;
+        a {
+            color: #4e0eff;
+            text-decoration: none;
+            font-weight: bold
         }
     }
 }
