@@ -17,7 +17,7 @@ app.use("/api/auth", userRoutes)
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('MongoDB connected'))
-    .catch((error) => console.error('MongoDB connection error:', error));
+    .catch((error) => console.log('MongoDB connection error:', error));
 
 const server = app.listen(process.env.PORT, () => {
     console.log(`Server is listening on Port ${process.env.PORT}`);
