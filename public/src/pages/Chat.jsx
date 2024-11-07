@@ -4,11 +4,13 @@ import axios from "axios"
 import { useNavigate } from 'react-router-dom'
 import { allUsersRoute } from '../utils/APIRoutes'
 import Contacts from '../components/Contacts'
+import Welcome from '../components/Welcome'
 
 function Chat() {
 
   const [contacts, setContacts] = useState([])
   const [currentUser, setCurrentUser] = useState(undefined)
+ const [currentChat, setCurrentChat] = useState(undefined)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -33,9 +35,17 @@ function Chat() {
     }}
     current()
   }, [currentUser])
+
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat)
+  }
   return( <Container>
     <div className='container'>
-      <Contacts contacts= {contacts}/>
+      <Contacts contacts= {contacts} 
+      currentUser = {currentUser} 
+      changeChat = {handleChatChange} 
+      />
+      <Welcome currentUser = {currentUser} />
     </div>
   </Container>
   )
@@ -53,10 +63,10 @@ const Container = styled.div`
   .container {
     height: 85vh;
     width: 85vw;
-    background-color: #00000076
+    background-color: #00000076;
     display: grid;
     grid-template-columns: 25% 75%;
-    @media screen and(min-width: 360px) and (max-width: 480px){
+    @media screen and(min-width: 720px) and (max-width: 1080px){
       grid-template-columns: 35% 65%;
     }
   }
