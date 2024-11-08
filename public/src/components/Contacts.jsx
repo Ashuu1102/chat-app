@@ -100,11 +100,11 @@ const Container = styled.div`
       width: 90%;
       cursor: pointer;
       border-radius: 0.2rem;
-      padding: 04rem;
+      padding: 0.4rem;
       gap:1rem;
       display: flex;
       align-items: center;
-      transition: 0.5ms ease-in-out;
+      transition: 0.5s ease-in-out;
       .avatar{
         img{
           height: 3rem;
@@ -137,7 +137,7 @@ const Container = styled.div`
         color: white
       }
     }
-    @media screen and(min-width: 720px) and (max-width: 1080px){
+    @media screen and (min-width: 720px) and (max-width: 1080px){
       gap: 0.5rem;
       h2{
         font-size: 1rem;
