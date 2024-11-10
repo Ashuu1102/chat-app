@@ -24,7 +24,7 @@ function Chat() {
       setIsLoaded(true)
     }}
     chat()
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
     const current = async() => {
@@ -37,7 +37,7 @@ function Chat() {
       }
     }}
     current()
-  }, [currentUser])
+  }, [currentUser,navigate])
 
   const handleChatChange = (chat) => {
     setCurrentChat(chat)
@@ -51,7 +51,7 @@ function Chat() {
       {isLoaded && currentChat === undefined ? (
         <Welcome currentUser = {currentUser} />
       ): (
-        <ChatContainer currentChat = {currentChat} />
+        <ChatContainer currentChat = {currentChat} currentUser = {currentUser} />
       )}
     </div>
   </Container>
